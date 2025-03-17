@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oxy Fitness Admin - Selling Items</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #eef2f7, #ffffff);
+      display: flex;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+
+    /* Side Panel Styles */
+    .side-panel {
+      width: 250px;
+      background-color: #1b3b6f;
+      color: #fff;
+      height: 100vh;
+      padding: 30px 20px;
+      box-sizing: border-box;
+      border-right: 2px solid #00aaff;
+    }
+
+    .side-panel h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
+      color: #00aaff;
+      font-weight: 600;
+    }
+
+    .side-panel ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .side-panel ul li {
+      margin: 20px 0;
+    }
+
+    .side-panel ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, padding 0.3s ease;
+      font-size: 16px;
+    }
+
+    .side-panel ul li a:hover, .side-panel ul li a.active {
+      background-color: #295891;
+      padding-left: 20px;
+    }
+
+    .side-panel ul li a i {
+      margin-right: 15px;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .side-panel ul li a:hover i {
+      transform: rotate(15deg);
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    /* Header Styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      border-bottom: 4px solid #3697c7;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #1b3b6f;
+    }
+
+    .header .filters {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* Enhanced Selection Dropdown */
+    .header select {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      background-color: #fff;
+      cursor: pointer;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="gray"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+    }
+
+    .header select:hover, .header select:focus {
+      border-color: #3697c7;
+      box-shadow: 0px 2px 8px rgba(0, 167, 255, 0.3);
+    }
+
+    /* Enhanced Search Bar */
+    .header .search-bar {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      width: 250px;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header .search-bar input {
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      width: 100%;
+      padding: 5px;
+    }
+
+    .header .search-bar i {
+      color: #0073e6;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    .header .search-bar:hover, .header .search-bar:focus-within {
+      border-color: #3697c7;
+      box-shadow: 0px 2px 8px rgba(0, 167, 255, 0.3);
+    }
+
+    /* Product Grid Styles */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    /* Product Card Styles */
+    .product-card {
+      width: 220px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Image Styling */
+    .product-image {
+      width: 100%;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    /* Product Details */
+    .product-details {
+      margin-top: 15px;
+    }
+
+    /* Brand Name */
+    .brand-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0073e6;
+      margin-bottom: 8px;
+      text-transform: capitalize;
+    }
+
+    /* Rating Information */
+    .rating {
+      font-size: 12px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    /* Price Tags */
+    .price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    .old-price {
+      text-decoration: line-through;
+      color: #888;
+      font-size: 16px;
+      margin-right: 15px;
+    }
+
+    .new-price {
+      color: #f70909;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* Action Buttons */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    .edit-btn, .delete-btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .edit-btn {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .edit-btn:hover {
+      background-color: #2980b9;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .edit-btn i, .delete-btn i {
+      font-size: 16px;
+    }
+
+    /* Enhanced Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 350px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-content h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #1b3b6f;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .modal-content label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .modal-content input:focus {
+      border-color: #3697c7;
+      outline: none;
+      box-shadow: 0px 0px 8px rgba(54, 151, 199, 0.3);
+    }
+
+    .modal-content .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-content button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .modal-content button.save-btn {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .modal-content button.save-btn:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .modal-content button.cancel-btn {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .modal-content button.cancel-btn:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    /* Notification Styles */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .notification.success {
+      background-color: #28a745; /* Green for success */
+    }
+
+    .notification.error {
+      background-color: #dc3545; /* Red for error */
+    }
+
+    .notification i {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Side Panel -->
+  <div class="side-panel">
+    <h2>Oxy Fitness</h2>
+    <ul>
+      <li><a href="supplier.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="listitem.html"><i class="fas fa-box-open"></i> List Items</a></li>
+      <li><a href="selling.html" class="active"><i class="fas fa-store"></i>Selling Items</a></li>
+      <li><a href="setting.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1>Selling Items</h1>
+      <div class="filters">
+        <select>
+          <option value="all">All Categories</option>
+          <option value="super-deals">Super Deals</option>
+          <option value="vitamins">Vitamins</option>
+          <option value="protein">Protein</option>
+          <option value="boosters">Boosters</option>
+          <option value="hot-deals">Hot Deals</option>
+          <option value="gym-accessories">Gym Accessories</option>
+        </select>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search items...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+      <!-- Product Card 1 -->
+      <div class="product-card" data-id="1">
+        <img src="images/sup2.png" alt="Supplement 1" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Vital Strength Total +</h3>
+          <p class="rating">1.2kg | 25g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 27,000</span>
+            <span class="new-price">LKR 16,200</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(1)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(1)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 2 -->
+      <div class="product-card" data-id="2">
+        <img src="images/sup3.png" alt="Supplement 2" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">MuscleTech NitroTech</h3>
+          <p class="rating">2kg | 30g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 30,000</span>
+            <span class="new-price">LKR 18,000</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(2)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(2)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="3">
+        <img src="images/sup4.png" alt="Supplement 3" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Vital Strength Sport</h3>
+          <p class="rating">1.5kg | 5g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 28,900</span>
+            <span class="new-price">LKR 17,340</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(3)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(3)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+       <!-- Product Card 4 -->
+       <div class="product-card" data-id="4">
+        <img src="images/sup5.png" alt="Supplement 4" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Vital Strength Ripped</h3>
+          <p class="rating">1.2kg | 4g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 27,000</span>
+            <span class="new-price">LKR 16,200</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(4)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(4)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+       <!-- Product Card 5 -->
+       <div class="product-card" data-id="5">
+        <img src="images/sup6.png" alt="Supplement 5" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Vital Strength</h3>
+          <p class="rating">2kg | 30g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 29,000</span>
+            <span class="new-price">LKR 17,800</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(5)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(5)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Product Card 6 -->
+      <div class="product-card" data-id="6">
+        <img src="images/sup8.png" alt="Supplement 6" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Vital Strength Whey</h3>
+          <p class="rating">1.2kg | 4g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 27,000</span>
+            <span class="new-price">LKR 16,200</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(6)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(6)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 7 -->
+      <div class="product-card" data-id="7">
+        <img src="images/sup9.png" alt="Supplement 7" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Vital Strength Plant</h3>
+          <p class="rating">1kg | 4g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 22,030</span>
+            <span class="new-price">LKR 13,200</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(7)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(7)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 8 -->
+      <div class="product-card" data-id="8">
+        <img src="images/sup10.png" alt="Supplement 8" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Vital Strength Ripped</h3>
+          <p class="rating">3kg | 40g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 14,788</span>
+            <span class="new-price">LKR 7,394</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(8)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(8)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+       <!-- Product Card 9 -->
+       <div class="product-card" data-id="9">
+        <img src="images/p1.png" alt="Supplement 9" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Nutritech</h3>
+          <p class="rating">2kg | 30g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 32,000</span>
+            <span class="new-price">LKR 25,600</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(9)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(9)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 10 -->
+      <div class="product-card" data-id="10">
+        <img src="images/p2.png" alt="Supplement 10" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Applied Nutrition</h3>
+          <p class="rating">1.5kg | 25g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 28,000</span>
+            <span class="new-price">LKR 23,800</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(10)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(10)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 11 -->
+      <div class="product-card" data-id="11">
+        <img src="images/p3.png" alt="Supplement 11" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Applied Nutrition</h3>
+          <p class="rating">1kg | 20g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 24,000</span>
+            <span class="new-price">LKR 21,600</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(11)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(11)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 12 -->
+      <div class="product-card" data-id="12">
+        <img src="images/p4.png" alt="Supplement 12" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Pure Protein</h3>
+          <p class="rating">3kg | 40g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 35,000</span>
+            <span class="new-price">LKR 26,250</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(12)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(12)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 13 -->
+      <div class="product-card" data-id="13">
+        <img src="images/p5.png" alt="Supplement 13" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Cellucor Pre-workout</h3>
+          <p class="rating">1.2kg | 60g per serving</p>
+          <div class="price">
+            <span class="old-price">LKR 12,800</span>
+            <span class="new-price">LKR 9,600</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(13)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(13)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+       <!-- Product Card 14 -->
+       <div class="product-card" data-id="14">
+        <img src="images/belt.png" alt="Accessory 1" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Lifting Belt</h3>
+          <p class="rating">Premium leather belt for weightlifting</p>
+          <div class="price">
+            <span class="old-price">LKR 5,500</span>
+            <span class="new-price">LKR 5,500</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(14)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(14)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 15 -->
+      <div class="product-card" data-id="15">
+        <img src="images/shaker1.png" alt="Accessory 2" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Protein Shaker</h3>
+          <p class="rating">Oziva BPA-free, 700ml capacity</p>
+          <div class="price">
+            <span class="old-price">LKR 2,000</span>
+            <span class="new-price">LKR 2,000</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(15)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(15)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 16 -->
+      <div class="product-card" data-id="16">
+        <img src="images/gloves.png" alt="Accessory 3" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Training Gloves</h3>
+          <p class="rating">Padded gloves for gym workouts</p>
+          <div class="price">
+            <span class="old-price">LKR 3,200</span>
+            <span class="new-price">LKR 3,200</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(16)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(16)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 17 -->
+      <div class="product-card" data-id="17">
+        <img src="images/strap.png" alt="Accessory 4" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Lifting Straps</h3>
+          <p class="rating">Heavy-duty straps for deadlifts</p>
+          <div class="price">
+            <span class="old-price">LKR 1,800</span>
+            <span class="new-price">LKR 1,800</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(17)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(17)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 18 -->
+      <div class="product-card" data-id="18">
+        <img src="images/headband.png" alt="Accessory 5" class="product-image">
+        <div class="product-details">
+          <h3 class="brand-name">Sweat Headband</h3>
+          <p class="rating">Absorbent and comfortable</p>
+          <div class="price">
+            <span class="old-price">LKR 1,200</span>
+            <span class="new-price">LKR 1,200</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="openEditModal(18)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" onclick="deleteItem(18)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h2>Edit Product</h2>
+      <form id="editForm">
+        <label for="editBrandName">Brand Name</label>
+        <input type="text" id="editBrandName" placeholder="Enter brand name" required>
+
+        <label for="editRating">Rating</label>
+        <input type="text" id="editRating" placeholder="Enter rating details" required>
+
+        <label for="editOldPrice">Old Price</label>
+        <input type="text" id="editOldPrice" placeholder="Enter old price" required>
+
+        <label for="editNewPrice">New Price</label>
+        <input type="text" id="editNewPrice" placeholder="Enter new price" required>
+
+        <div class="button-group">
+          <button type="submit" class="save-btn">Save Changes</button>
+          <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Container -->
+  <div id="notification" class="notification">
+    <i id="notification-icon"></i>
+    <span id="notification-message"></span>
+  </div>
+
+  <script>
+    // Function to filter products based on the selected category
+    function filterProducts(category) {
+      const productCards = document.querySelectorAll('.product-card');
+  
+      productCards.forEach(card => {
+        const brandName = card.querySelector('.brand-name').textContent.toLowerCase();
+  
+        // Determine which category the product belongs to
+        const isSuperDeal = brandName.includes('vital strength');
+        const isHotDeal = brandName.includes('applied nutrition') || 
+                           brandName.includes('cellucor pre-workout') || 
+                           brandName.includes('pure protein') || 
+                           brandName.includes('nutritech');
+        const isAccessory = brandName.includes('lifting belt') || 
+                            brandName.includes('protein shaker') || 
+                            brandName.includes('training gloves') || 
+                            brandName.includes('lifting straps') || 
+                            brandName.includes('sweat headband');
+  
+        switch (category) {
+          case 'super-deals':
+            if (isSuperDeal) {
+              card.style.display = 'flex'; // Show Vital Strength products
+            } else {
+              card.style.display = 'none'; // Hide others
+            }
+            break;
+          case 'hot-deals':
+            if (isHotDeal) {
+              card.style.display = 'flex'; // Show Applied Nutrition, Cellucor, Pure Protein, Nutritech
+            } else {
+              card.style.display = 'none'; // Hide others
+            }
+            break;
+          case 'gym-accessories':
+            if (isAccessory) {
+              card.style.display = 'flex'; // Show gym accessories
+            } else {
+              card.style.display = 'none'; // Hide others
+            }
+            break;
+          default:
+            card.style.display = 'flex'; // Show all products for "All Categories"
+            break;
+        }
+      });
+    }
+  
+    // Add event listener to the category filter dropdown
+    document.querySelector('.header select').addEventListener('change', (e) => {
+      const selectedCategory = e.target.value;
+      filterProducts(selectedCategory);
+    });
+  
+    // Function to open the edit modal
+    function openEditModal(id) {
+      const modal = document.getElementById('editModal');
+      const productCard = document.querySelector(`.product-card[data-id="${id}"]`);
+  
+      // Populate the modal with current product details
+      document.getElementById('editBrandName').value = productCard.querySelector('.brand-name').textContent;
+      document.getElementById('editRating').value = productCard.querySelector('.rating').textContent;
+      document.getElementById('editOldPrice').value = productCard.querySelector('.old-price').textContent.replace('LKR ', '');
+      document.getElementById('editNewPrice').value = productCard.querySelector('.new-price').textContent.replace('LKR ', '');
+  
+      // Show the modal
+      modal.style.display = 'flex';
+  
+      // Handle form submission
+      document.getElementById('editForm').onsubmit = (e) => {
+        e.preventDefault();
+        updateProduct(id);
+      };
+    }
+  
+    // Function to close the edit modal
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+    }
+  
+    // Function to update the product details
+    function updateProduct(id) {
+      const productCard = document.querySelector(`.product-card[data-id="${id}"]`);
+  
+      // Update the product details
+      productCard.querySelector('.brand-name').textContent = document.getElementById('editBrandName').value;
+      productCard.querySelector('.rating').textContent = document.getElementById('editRating').value;
+      productCard.querySelector('.old-price').textContent = `LKR ${document.getElementById('editOldPrice').value}`;
+      productCard.querySelector('.new-price').textContent = `LKR ${document.getElementById('editNewPrice').value}`;
+  
+      // Close the modal
+      closeEditModal();
+  
+      // Show success notification
+      showNotification('Product updated successfully', 'success');
+    }
+  
+    // Function to delete a product
+    function deleteItem(id) {
+      const confirmDelete = confirm(`Are you sure you want to delete item with ID: ${id}?`);
+      if (confirmDelete) {
+        const productCard = document.querySelector(`.product-card[data-id="${id}"]`);
+        productCard.remove();
+  
+        // Show error notification
+        showNotification('Product deleted successfully', 'error');
+      }
+    }
+  
+    // Function to show a notification
+    function showNotification(message, type) {
+      const notification = document.getElementById('notification');
+      const notificationIcon = document.getElementById('notification-icon');
+      const notificationMessage = document.getElementById('notification-message');
+  
+      // Set notification content based on type
+      if (type === 'success') {
+        notification.classList.remove('error');
+        notification.classList.add('success');
+        notificationIcon.className = 'fas fa-check-circle';
+      } else if (type === 'error') {
+        notification.classList.remove('success');
+        notification.classList.add('error');
+        notificationIcon.className = 'fas fa-times-circle';
+      }
+  
+      notificationMessage.textContent = message;
+      notification.classList.add('show');
+  
+      // Hide the notification after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

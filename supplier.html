@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oxy Fitness Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background: linear-gradient(to right, #eef2f7, #ffffff);
+      height: 100vh;
+      flex-direction: row;
+      box-sizing: border-box;
+    }
+
+    /* Side Panel */
+    .side-panel {
+      width: 250px;
+      background-color: #1b3b6f;
+      color: #fff;
+      height: 100vh;
+      padding: 30px 20px;
+      box-sizing: border-box;
+      transition: width 0.3s ease-in-out;
+      border-right: 2px solid #00aaff;
+    }
+
+    .side-panel h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
+      color: #00aaff;
+      font-weight: 600;
+    }
+
+    .side-panel ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .side-panel ul li {
+      margin: 20px 0;
+    }
+
+    .side-panel ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, padding 0.3s ease;
+      font-size: 16px;
+    }
+
+    .side-panel ul li a:hover, .side-panel ul li a.active {
+      background-color: #295891;
+      padding-left: 20px;  
+    }
+
+    .side-panel ul li a i {
+      margin-right: 15px;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .side-panel ul li a:hover i {
+      transform: rotate(15deg); /* Rotate icon on hover */
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      transition: padding 0.3s ease;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      border-bottom: 4px solid #3697c7c9;
+    }
+
+    /* Updated Welcome Section */
+    .welcome-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .welcome-section img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .welcome-section h1 {
+      font-size: 28px;
+      color: #1b3b6f;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .welcome-section h1 span {
+      font-weight: 400;
+      color: #7f8c8d;
+    }
+
+    .welcome-section p {
+      margin: 5px 0 0;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+
+    /* Updated Search Bar */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    .search-bar input {
+      padding: 12px 40px 12px 15px;
+      border: 1px solid #ddd;
+      font-family: 'Poppins', sans-serif;
+      border-radius: 8px;
+      margin-right: 15px;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      width: 300px;
+      background: #f9f9f9;
+    }
+
+    .search-bar input:focus {
+      border-color: #00aaff;
+      box-shadow: 0 0 15px rgba(0, 170, 255, 0.4);
+    }
+
+    .search-bar button {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #073850, #226374);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .search-bar button:hover {
+      background: linear-gradient(135deg, #226374, #073850);
+      transform: scale(1.05);
+    }
+
+    /* Download Button */
+    .download-btn {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #073850, #226374);
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: auto;
+      display: flex;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background: linear-gradient(135deg, #226374, #073850);
+      transform: scale(1.05);
+    }
+
+    /* Updated Dashboard Cards */
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #ffffff, #f9f9f9);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #1b3b6f;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 30px;
+      font-weight: bold;
+      color: #00aaff;
+      margin: 10px 0;
+    }
+
+    .card i {
+      font-size: 40px;
+      color: #1b3b6f;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .card-date {
+      display: block;
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-top: 10px;
+      font-weight: 400;
+    }
+
+    /* Add a subtle overlay on hover */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 170, 255, 0.1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    /* Responsive Styles */
+    @media screen and (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .side-panel {
+        width: 100%;
+        height: auto;
+      }
+
+      .main-content {
+        padding: 15px;
+      }
+
+      .download-btn {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-bar {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .dashboard-cards {
+        grid-template-columns: 1fr 1fr; /* Two columns for medium screens */
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .dashboard-cards {
+        grid-template-columns: 1fr; 
+      }
+
+      .download-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Side Panel -->
+  <div class="side-panel">
+    <h2>Oxy Fitness</h2>
+    <ul>
+      <li><a href="supplier.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="listitem.html"><i class="fas fa-box-open"></i> List Items</a></li>
+      <li><a href="selling.html"><i class="fas fa-store"></i>Selling Items</a></li>
+      <li><a href="setting.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div class="welcome-section">
+        <img src="images/profileimg.png" alt="Profile Image">
+        <div>
+          <h1>Welcome, <span>John Doe</span></h1>
+          <p>Supplier Dashboard</p>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+
+    <!-- Download Report Button -->
+    <button class="download-btn">Download Report</button>
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard-cards">
+      <div class="card">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Total Orders</h3>
+        <p>18</p>
+        <span class="card-date">March 2025</span>
+      </div>
+      <div class="card">
+        <i class="fas fa-clock"></i>
+        <h3>Pending Orders</h3>
+        <p>7</p>
+        <span class="card-date">Last 5 Days</span>
+      </div>
+      <div class="card">
+        <i class="fas fa-check-circle"></i>
+        <h3>Completed Orders</h3>
+        <p>12</p>
+        <span class="card-date">March 2025</span>
+      </div>
+      <div class="card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Revenue</h3>
+        <p>LKR 120,340</p>
+        <span class="card-date">This Month</span>
+      </div>
+      <div class="card">
+        <i class="fas fa-wallet"></i>
+        <h3>Withdrawals</h3>
+        <p>LKR 65,780</p>
+        <span class="card-date">This Month</span>
+      </div>
+      <div class="card">
+        <i class="fas fa-boxes"></i>
+        <h3>Available Stocks</h3>
+        <p>24</p>
+        <span class="card-date">This Month</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // Initialize jsPDF
+    const { jsPDF } = window.jspdf;
+
+    // Function to generate the PDF report
+    function generatePDF() {
+      const doc = new jsPDF();
+
+      // Set the title of the report
+      doc.setFontSize(22);
+      doc.setTextColor(27, 59, 111); // Dark blue color
+      doc.text("Oxy Fitness Admin Dashboard Report", 10, 20);
+
+      // Set the subtitle
+      doc.setFontSize(14);
+      doc.setTextColor(127, 140, 141); // Gray color
+      doc.text("Generated on: " + new Date().toLocaleDateString(), 10, 30);
+
+      // Add a line separator
+      doc.setDrawColor(0, 170, 255); // Blue color
+      doc.setLineWidth(0.5);
+      doc.line(10, 35, 200, 35);
+
+      // Loop through each card and add its details to the PDF
+      const cards = document.querySelectorAll(".card");
+      let yOffset = 45; // Starting Y position for content
+
+      cards.forEach((card, index) => {
+        const title = card.querySelector("h3").innerText;
+        const value = card.querySelector("p").innerText;
+        const date = card.querySelector(".card-date").innerText;
+
+        // Add card title
+        doc.setFontSize(16);
+        doc.setTextColor(27, 59, 111); // Dark blue color
+        doc.text(`${index + 1}. ${title}`, 10, yOffset);
+
+        // Add card value
+        doc.setFontSize(14);
+        doc.setTextColor(0, 170, 255); // Blue color
+        doc.text(`Value: ${value}`, 10, yOffset + 10);
+
+        // Add card date
+        doc.setFontSize(12);
+        doc.setTextColor(127, 140, 141); // Gray color
+        doc.text(`Date: ${date}`, 10, yOffset + 20);
+
+        // Add a small separator line
+        doc.setDrawColor(200, 200, 200); // Light gray color
+        doc.setLineWidth(0.2);
+        doc.line(10, yOffset + 25, 200, yOffset + 25);
+
+        // Update Y offset for the next card
+        yOffset += 35;
+      });
+
+      // Save the PDF
+      doc.save("Oxy_Fitness_Dashboard_Report.pdf");
+    }
+
+    // Attach the event listener to the download button
+    document.querySelector(".download-btn").addEventListener("click", generatePDF);
+  </script>
+</body>
+</html>

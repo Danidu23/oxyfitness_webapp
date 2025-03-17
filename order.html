@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oxy Fitness Admin - Orders</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Previous CSS remains the same */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background: linear-gradient(to right, #eef2f7, #ffffff);
+      height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .side-panel {
+      width: 250px;
+      background-color: #1b3b6f;
+      color: #fff;
+      height: 100vh;
+      padding: 30px 20px;
+      box-sizing: border-box;
+      transition: width 0.3s ease-in-out;
+      border-right: 2px solid #00aaff;
+    }
+
+    .side-panel h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
+      color: #00aaff;
+      font-weight: 600;
+    }
+
+    .side-panel ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .side-panel ul li {
+      margin: 20px 0;
+    }
+
+    .side-panel ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, padding 0.3s ease;
+      font-size: 16px;
+    }
+
+    .side-panel ul li a:hover, .side-panel ul li a.active {
+      background-color: #295891;
+      padding-left: 20px;
+    }
+
+    .side-panel ul li a i {
+      margin-right: 15px;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .side-panel ul li a:hover i {
+      transform: rotate(15deg);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      transition: padding 0.3s ease;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      border-bottom: 4px solid #3697c7;
+    }
+    .header h1{
+        color: #1b3b6f;
+    }
+
+    /* Enhanced Search and Filter Styles */
+.search-filter {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.search-filter input, .search-filter select {
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.search-filter input:focus, .search-filter select:focus {
+  border-color: #00aaff;
+  box-shadow: 0px 2px 12px rgba(0, 170, 255, 0.2);
+}
+
+.search-filter input::placeholder {
+  color: #999;
+}
+
+.search-filter select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231b3b6f%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+  padding-right: 35px;
+  cursor: pointer;
+}
+
+.search-filter select:hover {
+  border-color: #00aaff;
+}
+
+.search-filter input:hover {
+  border-color: #00aaff;
+}
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin-top: 30px;
+      background: transparent;
+    }
+
+    table th, table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #f4f6f9;
+      color: #1b3b6f;
+      font-weight: 600;
+    }
+
+    table tr {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    table tr:hover {
+      transform: translateY(-2px);
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    table td {
+      font-size: 16px;
+    }
+
+    table td img {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      min-width: 100px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .status-badge.pending {
+      background-color: #f7d06a;
+      color: #fff;
+    }
+
+    .status-badge.delivered {
+      background-color: #6dbf71;
+      color: #fff;
+    }
+
+    .status-badge.canceled {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .status-badge i {
+      margin-right: 8px;
+    }
+
+    .action-btn {
+      padding: 8px 16px;
+      background-color: #073850;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .action-btn:hover {
+      background-color: #226374;
+      transform: scale(1.05);
+    }
+
+    .settings-btn {
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      color: #666;
+      font-size: 20px;
+      padding: 5px;
+      transition: transform 0.3s ease;
+    }
+
+    .settings-btn:hover {
+      transform: rotate(90deg);
+    }
+
+    .actions {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      z-index: 1;
+    }
+
+    .actions button {
+      padding: 8px 16px;
+      background-color: #073850;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin: 5px 0;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .actions button:hover {
+      background-color: #226374;
+      transform: scale(1.05);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .pagination button {
+      padding: 10px 15px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 8px;
+      background-color: #073850;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .pagination button:hover {
+      background-color: #226374;
+      transform: scale(1.05);
+    }
+
+    .pagination button.active {
+      background-color: #226374;
+    }
+
+    @media screen and (max-width: 768px) {
+      table th, table td {
+        padding: 10px;
+      }
+
+      .status-badge {
+        font-size: 12px;
+        padding: 6px 12px;
+        min-width: 80px;
+      }
+
+      .action-btn {
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Side Panel -->
+  <div class="side-panel">
+    <h2>Oxy Fitness</h2>
+    <ul>
+      <li><a href="supplier.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="order.html" class="active"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="listitem.html"><i class="fas fa-box-open"></i> List Items</a></li>
+      <li><a href="selling.html"><i class="fas fa-store"></i>Selling Items</a></li>
+      <li><a href="setting.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header with Search and Filter -->
+    <div class="header">
+        <h1>Orders</h1>
+        <div class="search-filter">
+          <input type="text" placeholder="Search orders..." id="searchInput">
+          <select id="filterStatus">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="delivered">Delivered</option>
+            <option value="canceled">Canceled</option>
+          </select>
+        </div>
+      </div>
+
+    <!-- Orders Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Member ID</th>
+          <th>Member Name</th>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Order Row 1 -->
+        <tr>
+          <td>#101</td>
+          <td>John Doe</td>
+          <td><img src="images/p1.png" alt="Product Image"></td>
+          <td>Fitness T-shirt</td>
+          <td>2025-03-12</td>
+          <td>LKR 23,500</td>
+          <td>
+            <div class="status-badge pending" onclick="changeStatus(this)">
+              <i class="fas fa-clock"></i> Pending
+            </div>
+          </td>
+          <td>
+            <button class="settings-btn" onclick="toggleActions('actions-1')"><i class="fas fa-cog"></i></button>
+            <div class="actions" id="actions-1">
+              <button class="action-btn" onclick="manageOrder('accept', 'order-1', 'actions-1', this.closest('tr').querySelector('.status-badge'))">
+                <i class="fas fa-check-circle"></i> Accept
+              </button>
+              <button class="action-btn" onclick="manageOrder('delete', 'order-1', 'actions-1', this.closest('tr').querySelector('.status-badge'))">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+        <!-- Order Row 2 -->
+        <tr>
+          <td>#102</td>
+          <td>Jane Smith</td>
+          <td><img src="images/sup4.png" alt="Product Image"></td>
+          <td>Dumbbells Set</td>
+          <td>2025-03-10</td>
+          <td>LKR 13,600</td>
+          <td>
+            <div class="status-badge delivered" onclick="changeStatus(this)">
+              <i class="fas fa-check-circle"></i> Delivered
+            </div>
+          </td>
+          <td>
+            <button class="settings-btn" onclick="toggleActions('actions-2')"><i class="fas fa-cog"></i></button>
+            <div class="actions" id="actions-2">
+              <button class="action-btn" onclick="manageOrder('accept', 'order-2', 'actions-2', this.closest('tr').querySelector('.status-badge'))">
+                <i class="fas fa-check-circle"></i> Accept
+              </button>
+              <button class="action-btn" onclick="manageOrder('delete', 'order-2', 'actions-2', this.closest('tr').querySelector('.status-badge'))">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+        <!-- Order Row 3 -->
+        <tr>
+          <td>#103</td>
+          <td>Emily Clark</td>
+          <td><img src="images/sup2.png" alt="Product Image"></td>
+          <td>Yoga Mat</td>
+          <td>2025-03-08</td>
+          <td>LKR 19,570</td>
+          <td>
+            <div class="status-badge canceled" onclick="changeStatus(this)">
+              <i class="fas fa-times-circle"></i> Canceled
+            </div>
+          </td>
+          <td>
+            <button class="settings-btn" onclick="toggleActions('actions-3')"><i class="fas fa-cog"></i></button>
+            <div class="actions" id="actions-3">
+              <button class="action-btn" onclick="manageOrder('accept', 'order-3', 'actions-3', this.closest('tr').querySelector('.status-badge'))">
+                <i class="fas fa-check-circle"></i> Accept
+              </button>
+              <button class="action-btn" onclick="manageOrder('delete', 'order-3', 'actions-3', this.closest('tr').querySelector('.status-badge'))">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button onclick="changePage(1)" class="active">1</button>
+      <button onclick="changePage(2)">2</button>
+      <button onclick="changePage(3)">3</button>
+    </div>
+  </div>
+
+  <script>
+    // Function to toggle the action buttons visibility
+    function toggleActions(actionsId) {
+      const actions = document.getElementById(actionsId);
+      actions.style.display = actions.style.display === 'none' || actions.style.display === '' ? 'flex' : 'none';
+    }
+
+    // Function to accept or delete the order
+    function manageOrder(action, orderId, actionsId, statusElement) {
+      if (action === 'accept') {
+        // Only change status to "Delivered" if the action is "accept"
+        statusElement.className = 'status-badge delivered';
+        statusElement.innerHTML = `<i class="fas fa-check-circle"></i> Delivered`;
+        console.log(`Order ${orderId} accepted and status changed to Delivered.`);
+        alert(`Order ${orderId} has been accepted and status changed to Delivered.`);
+      } else if (action === 'delete') {
+        // Only change status to "Canceled" if the action is "delete"
+        statusElement.className = 'status-badge canceled';
+        statusElement.innerHTML = `<i class="fas fa-times-circle"></i> Canceled`;
+        console.log(`Order ${orderId} deleted and status changed to Canceled.`);
+        alert(`Order ${orderId} has been deleted and status changed to Canceled.`);
+      }
+      // Close the action buttons after clicking
+      toggleActions(actionsId);
+    }
+
+    // Function to change the status of an order (optional, if you want to allow manual status changes)
+    function changeStatus(statusElement) {
+      const currentStatus = statusElement.classList[1]; // Get the current status class
+      let newStatus;
+
+      // Cycle through statuses
+      if (currentStatus === 'pending') {
+        newStatus = 'delivered';
+      } else if (currentStatus === 'delivered') {
+        newStatus = 'canceled';
+      } else {
+        newStatus = 'pending';
+      }
+
+      // Update the status badge
+      statusElement.className = `status-badge ${newStatus}`;
+      statusElement.innerHTML = `<i class="fas fa-${newStatus === 'pending' ? 'clock' : newStatus === 'delivered' ? 'check-circle' : 'times-circle'}"></i> ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`;
+
+      console.log(`Order status changed to ${newStatus}`);
+      alert(`Order status changed to ${newStatus}.`);
+    }
+
+    // Function to handle pagination
+    function changePage(pageNumber) {
+      const buttons = document.querySelectorAll('.pagination button');
+      buttons.forEach(button => button.classList.remove('active'));
+      buttons[pageNumber - 1].classList.add('active');
+      console.log(`Changed to page ${pageNumber}`);
+      // Here you would typically fetch and display the data for the selected page
+    }
+
+    // Function to handle search and filter
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const rows = document.querySelectorAll('table tbody tr');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+      });
+    });
+
+    document.getElementById('filterStatus').addEventListener('change', function() {
+      const filterStatus = this.value;
+      const rows = document.querySelectorAll('table tbody tr');
+      rows.forEach(row => {
+        const status = row.querySelector('.status-badge').classList[1];
+        row.style.display = filterStatus === 'all' || status === filterStatus ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

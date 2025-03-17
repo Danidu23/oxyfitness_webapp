@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oxy Fitness Admin - Settings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background: #f5f7fa;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+
+    /* Side Panel Styles */
+    .side-panel {
+      width: 250px;
+      background-color: #1b3b6f;
+      color: #fff;
+      height: 100vh;
+      padding: 30px 20px;
+      box-sizing: border-box;
+      border-right: 2px solid #00aaff;
+    }
+
+    .side-panel h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
+      color: #00aaff;
+      font-weight: 600;
+    }
+
+    .side-panel ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .side-panel ul li {
+      margin: 20px 0;
+    }
+
+    .side-panel ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, padding 0.3s ease;
+      font-size: 16px;
+    }
+
+    .side-panel ul li a:hover, .side-panel ul li a.active {
+      background-color: #295891;
+      padding-left: 20px;
+    }
+
+    .side-panel ul li a i {
+      margin-right: 15px;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .side-panel ul li a:hover i {
+      transform: rotate(15deg);
+    }
+
+    /* Content Styles */
+    .content {
+      flex-grow: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .settings-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-section {
+      width: 48%;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #1b3b6f;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #1b3b6f;
+      box-shadow: 0 0 5px rgba(27, 59, 111, 0.5);
+      outline: none;
+    }
+
+    .form-group input::placeholder {
+      font-family: 'Poppins', sans-serif;
+      color: #aaa;
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+
+    .toggle-switch label {
+      color: #26355e; /* Darker blue color for the text */
+      font-weight: 500;
+    }
+
+    .save-btn {
+      background-color: #1b3b6f;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .save-btn:hover {
+      background-color: #295891;
+    }
+
+    /* Profile Image Section */
+    .profile-image-section {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #1b3b6f;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
+}
+
+.profile-image-upload {
+  display: none;
+}
+
+.profile-image-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(50%, 50%);
+  background-color: #1b3b6f;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
+}
+
+.profile-image-label:hover {
+  background-color: #295891;
+}
+
+.profile-image-label i {
+  font-size: 14px;
+}
+
+
+    /* Form Section Headings */
+    .form-section h3 {
+      margin-bottom: 20px;
+      color: #1b3b6f;
+      font-weight: 600;
+    }
+
+    /* Toggle Switch Styles */
+    .toggle-switch input[type="checkbox"] {
+      position: relative;
+      width: 40px;
+      height: 20px;
+      appearance: none;
+      background-color: #ccc;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .toggle-switch input[type="checkbox"]:checked {
+      background-color: #1b3b6f;
+    }
+
+    .toggle-switch input[type="checkbox"]::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: white;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-switch input[type="checkbox"]:checked::before {
+      transform: translateX(20px);
+    }
+  </style>
+</head>
+<body>
+  <div class="side-panel">
+    <h2>Oxy Fitness</h2>
+    <ul>
+      <li><a href="supplier.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="listitem.html"><i class="fas fa-box-open"></i> List Items</a></li>
+      <li><a href="selling.html"><i class="fas fa-store"></i>Selling Items</a></li>
+      <li><a href="setting.html" class="active"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <div class="settings-container">
+      <div class="form-section">
+        <div class="profile-image-section">
+          <img src="images/profileimg.png" alt="Profile Image" class="profile-image" id="profileImage">
+          <label for="profileImageUpload" class="profile-image-label">
+            <i class="fas fa-pencil-alt"></i>
+          </label>
+          <input type="file" id="profileImageUpload" class="profile-image-upload" accept="image/*">
+        </div>
+        <h3>Edit Profile</h3>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" placeholder="Enter your phone number">
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" placeholder="Enter your address">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Change Password</h3>
+        <div class="form-group">
+          <label>Current Password</label>
+          <input type="password" placeholder="Enter current password">
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" placeholder="Enter new password">
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Confirm new password">
+        </div>
+        <h3>Notifications</h3>
+        <div class="toggle-switch">
+          <label>Order Confirmation</label>
+          <input type="checkbox" checked>
+        </div>
+        <div class="toggle-switch">
+          <label>Price Status Change</label>
+          <input type="checkbox">
+        </div>
+        <div class="toggle-switch">
+          <label>Order Delivered</label>
+          <input type="checkbox" checked>
+        </div>
+      </div>
+    </div>
+    <button class="save-btn">Save</button>
+  </div>
+
+  <script>
+    document.getElementById('profileImageUpload').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('profileImage').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>

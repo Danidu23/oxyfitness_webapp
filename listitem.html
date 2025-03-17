@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oxy Fitness Admin - List Items</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #eef2f7, #ffffff);
+      display: flex;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+
+    /* Placeholder Styling */
+    ::placeholder {
+      font-family: 'Poppins', sans-serif;
+      color: #999;
+      font-weight: 300;
+    }
+
+    /* Discount Styles */
+    .discount-price {
+      color: #e74c3c;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    .discount-price::before {
+      content: "(-";
+    }
+
+    .discount-price::after {
+      content: "%)";
+    }
+
+    /* Rest of your CSS remains the same */
+    .side-panel {
+      width: 250px;
+      background-color: #1b3b6f;
+      color: #fff;
+      height: 100vh;
+      padding: 30px 20px;
+      box-sizing: border-box;
+      border-right: 2px solid #00aaff;
+    }
+
+    .side-panel h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
+      color: #00aaff;
+      font-weight: 600;
+    }
+
+    .side-panel ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .side-panel ul li {
+      margin: 20px 0;
+    }
+
+    .side-panel ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, padding 0.3s ease;
+      font-size: 16px;
+    }
+
+    .side-panel ul li a:hover, .side-panel ul li a.active {
+      background-color: #295891;
+      padding-left: 20px;
+    }
+
+    .side-panel ul li a i {
+      margin-right: 15px;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .side-panel ul li a:hover i {
+      transform: rotate(15deg);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      border-bottom: 4px solid #3697c7;
+    }
+
+    .header h1 {
+      color: #1b3b6f;
+    }
+
+    /* Form Styles */
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h2 {
+      color: #1b3b6f;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #1b3b6f;
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: #00aaff;
+      box-shadow: 0px 2px 12px rgba(0, 170, 255, 0.2);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-group .file-upload {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .form-group .file-upload input[type="file"] {
+      display: none;
+    }
+
+    .form-group .file-upload label {
+      display: block;
+      padding: 12px;
+      background: #f4f6f9;
+      border: 2px dashed #e0e0e0;
+      border-radius: 10px;
+      text-align: center;
+      color: #1b3b6f;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .form-group .file-upload label:hover {
+      background: #e0e0e0;
+      border-color: #00aaff;
+    }
+
+    .form-group .file-upload label i {
+      margin-right: 10px;
+    }
+
+    .form-group .sub-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .form-group .sub-item input {
+      flex: 1;
+    }
+
+    .form-group .sub-item button {
+      padding: 10px 15px;
+      background: #1b3b6f;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .form-group .sub-item button:hover {
+      background: #00aaff;
+    }
+
+    .form-group .sub-item-list {
+      margin-top: 10px;
+    }
+
+    .form-group .sub-item-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .form-group .sub-item-list ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #f4f6f9;
+      border-radius: 8px;
+      margin-bottom: 5px;
+    }
+
+    .form-group .sub-item-list ul li span {
+      color: #1b3b6f;
+    }
+
+    .form-group .sub-item-list ul li button {
+      font-family: 'Poppins', sans-serif;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .form-group .sub-item-list ul li button:hover {
+      background: #c0392b;
+    }
+
+    .submit-btn {
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      padding: 15px;
+      background: #1b3b6f;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: hsl(200, 74%, 39%);
+    }
+  </style>
+</head>
+<body>
+  <!-- Side Panel -->
+  <div class="side-panel">
+    <h2>Oxy Fitness</h2>
+    <ul>
+      <li><a href="supplier.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="listitem.html" class="active"><i class="fas fa-box-open"></i> List Items</a></li>
+      <li><a href="selling.html"><i class="fas fa-store"></i>Selling Items</a></li>
+      <li><a href="setting.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1>List Items</h1>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <h2>Add New Product</h2>
+      <form id="productForm">
+        <!-- Product Title -->
+        <div class="form-group">
+          <label for="productTitle">Product Title</label>
+          <input type="text" id="productTitle" placeholder="Enter product title" required>
+        </div>
+
+        <!-- Product Description -->
+        <div class="form-group">
+          <label for="productDescription">Product Description</label>
+          <textarea id="productDescription" placeholder="Enter product description" required></textarea>
+        </div>
+
+        <!-- Product Image Upload -->
+        <div class="form-group">
+          <label>Product Image</label>
+          <div class="file-upload">
+            <input type="file" id="productImage" accept="image/*" required>
+            <label for="productImage">
+              <i class="fas fa-upload"></i> Choose an image
+            </label>
+          </div>
+        </div>
+
+        <!-- Product Price -->
+        <div class="form-group">
+          <label for="productPrice">Price (LKR)</label>
+          <input type="number" id="productPrice" placeholder="Enter product price" required>
+          <p id="priceDisplay" style="margin-top: 10px; font-weight: 500; color: #1b3b6f;">LKR 0.00</p>
+        </div>
+
+        <!-- Product Discount -->
+        <div class="form-group">
+          <label for="productDiscount">Discount (%)</label>
+          <input type="number" id="productDiscount" placeholder="Enter discount percentage" min="0" max="100">
+        </div>
+
+        <!-- Sub-Item Details -->
+        <div class="form-group">
+          <label>Sub-Item Details (e.g., Supplement Servings)</label>
+          <div class="sub-item">
+            <input type="text" id="subItemInput" placeholder="Enter sub-item detail">
+            <button type="button" onclick="addSubItem()">Add</button>
+          </div>
+          <div class="sub-item-list">
+            <ul id="subItemList"></ul>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Add Product</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Function to add sub-item details
+    function addSubItem() {
+      const subItemInput = document.getElementById('subItemInput');
+      const subItemList = document.getElementById('subItemList');
+
+      if (subItemInput.value.trim() !== '') {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span>${subItemInput.value}</span>
+          <button onclick="removeSubItem(this)">Remove</button>
+        `;
+        subItemList.appendChild(li);
+        subItemInput.value = '';
+      }
+    }
+
+    // Function to remove sub-item details
+    function removeSubItem(button) {
+      const li = button.closest('li');
+      li.remove();
+    }
+
+    // Function to calculate discounted price
+    function calculateDiscountedPrice(price, discount) {
+      if (discount > 0) {
+        return price - (price * (discount / 100));
+      }
+      return price;
+    }
+
+    // Function to update the displayed price
+    function updatePriceDisplay() {
+      const priceInput = document.getElementById('productPrice');
+      const discountInput = document.getElementById('productDiscount');
+      const priceDisplay = document.getElementById('priceDisplay');
+
+      const price = parseFloat(priceInput.value) || 0;
+      const discount = parseFloat(discountInput.value) || 0;
+
+      const discountedPrice = calculateDiscountedPrice(price, discount);
+      priceDisplay.textContent = `LKR ${discountedPrice.toFixed(2)}`;
+
+      if (discount > 0) {
+        priceDisplay.innerHTML += `<span class="discount-price">${discount}</span>`;
+      } else {
+        priceDisplay.innerHTML = `LKR ${price.toFixed(2)}`;
+      }
+    }
+
+    // Add event listeners to update price dynamically
+    document.getElementById('productPrice').addEventListener('input', updatePriceDisplay);
+    document.getElementById('productDiscount').addEventListener('input', updatePriceDisplay);
+
+    // Function to handle form submission
+    document.getElementById('productForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const productTitle = document.getElementById('productTitle').value;
+      const productDescription = document.getElementById('productDescription').value;
+      const productPrice = parseFloat(document.getElementById('productPrice').value) || 0;
+      const productDiscount = parseFloat(document.getElementById('productDiscount').value) || 0;
+      const subItems = Array.from(document.querySelectorAll('#subItemList span')).map(span => span.textContent);
+
+      // Log the data (you can replace this with an API call)
+      console.log({
+        title: productTitle,
+        description: productDescription,
+        price: productPrice,
+        discount: productDiscount,
+        subItems: subItems
+      });
+
+      alert('Product added successfully!');
+      this.reset(); // Reset the form
+      document.getElementById('subItemList').innerHTML = ''; // Clear sub-items
+      updatePriceDisplay(); // Reset price display
+    });
+  </script>
+</body>
+</html>
